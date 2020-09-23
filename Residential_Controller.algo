@@ -1,0 +1,114 @@
+DEFINE Column USING id AND status:
+    ID: id,
+    Status: status,
+    ElevatorList: SET to empty List
+    SEQUENCE create ElevatorList USING elevator_amount
+    ...
+    ENDSEQUENCE
+ENDDEFINE
+
+SEQUENCE OUTSIDE_BUTTON USING ElevatorList and floor_number and door_open and Floor_request_button and button_close_door
+    SET floor_number TO (1, 10)
+    SET floor_number(1) to ground_floor
+    SET door_open to false
+    
+    SHOW Floor_request_button to user
+    //outside button
+    if user clicks Floor_request_button then
+         READ current floor_number, ASSIGN x
+         READ user floor_number, ASSIGN y
+         call elevator closest to y
+            if both elevators are as close to y then 
+            call last elevator
+            endif
+            if x > y  then 
+             elevator go down until x = y then
+             door_open = true for 10 seconds or until
+             button_close_door is pressed
+             else if x < y then
+             elevator go up until x = y then
+             door_open = true for 10 seconds or until
+             button_close_door is pressed
+             else if x = y then
+             door_open = true for 10 seconds or until
+             button_close_door is pressed
+            endif
+    endif
+ENDSEQUENCE
+SEQUENCE inside button USING inside_buttons and inside_buttons_floors and door_open and button_close_door
+    SET inside_buttons_floors(1, 10)
+    SET door_open to false
+    if user in an elevator then
+        show inside_buttons
+        if user clicks inside_buttons_floors THEN 
+            READ current floor, ASSIGN x
+            READ floor button pressed, ASSIGN y
+            if x > y THEN 
+                elevator go down until x = y then
+                door_open = true for 10 seconds or until
+                 button_close_door is pressed
+            else if x < y THEN 
+                elevator go up until x = y then
+                 door_open = true for 10 seconds or until
+                 button_close_door is pressed
+            else if x = y then 
+                 door_open = true for 10 seconds or until
+                 button_close_door is pressed
+            endif
+        endif
+    endif
+ENDSEQUENCE
+SEQUENCE more than 1 call USING elevator and Floor_request_button and queue
+    //more than 1 call solution
+    SET queue to 0
+    if elevator is moving and Floor_request_button is pressed then
+        if moving elevator is not closest to y then 
+            do nothing
+            else if elevator is closest to y and is not going in the direction Floor_request_button is called then
+            transfer to next elevator
+            else if both elevators are not going the same way then 
+            queue it for the closest elevator
+            else if elevator is closest and going in the same way then
+            stop at the Floor_request_button call in the path of the furthest Floor_request_button call on its way
+        endif
+    endif
+ENDSEQUENCE
+// safety not moving with door open
+SEQUENCE door_open_stop USING door_open
+    if door_open = true then
+    elevator stop until door_open = false and 
+    queue Floor_request_button requests
+ENDSEQUENCE
+// returning to ground floor
+SEQUENCE return to ground_floor
+    if elevator is not active for 10 minutes then
+    elevator moves to ground_floor
+ENDSEQUENCE
+// for down and up buttons 
+SEQUENCE down_up_button USING Floor_request_button
+    if Floor_request_button(up) = true then
+        if elevator lower and moving up then
+        READ user floor number, ASSIGN x
+        READ current floor_number, ASSIGN y
+        until x = y then stop and door_open = true
+        else do nothing
+        endif
+    else if Floor_request_button(down) = true then
+         if elevator higher and moving down then
+        READ user floor number, ASSIGN x
+        READ current floor_number, ASSIGN y
+        until x = y then stop and door_open = true
+        else do nothing
+        endif
+ENDSEQUENCE
+
+
+    
+
+
+                
+         
+            
+
+
+        
