@@ -1,32 +1,178 @@
-//select column
+   
+   
+    define battery using amountOfColumn and _flooramount  and _minimumFloor and _maximumFloor and amountOfElevatorPerColumn
+        columnList: empty
+        status: online
+        FloorrequestbuttonList: EMPTY LIST
+
+        SEQUENCE createColumnlist Using amountOfColumn
+            init iterator to 1
+            for amountOfColumn
+                init newcolumn to instantiate column with iterator and _flooramount and _minimumFloor and _maximumFloor and amountOfElevatorPerColumn
+                add newcolumn to columnList
+                increment iterator
+            endfor
+        ENDSEQUENCE
+
+        SEQUENCE createFloorrequestbuttonList USING lowestFloor AND _flooramount
+            init iterator TO lowestFloor
+            FOR _flooramount
+                IF iterator is not equal to 0    
+                    IF iterator is less than 1
+                        INIT newFloorrequestbuttonList TO INSTANTIATE WITH DOWN AND iterator 
+                        ADD newFloorrequestbuttonList to FloorrequestbuttonList
+
+                    ELSE IF iterator is more than 1
+                        INIT newFloorrequestbuttonList TO INSTANTIATE WITH UP AND iterator
+                        ADD newFloorrequestbuttonList to FloorrequestbuttonList
+                    ENDIF
+                ENDIF
+                INCREMENT iterator BY 1
+            ENDFOR
+        ENDSEQUENCE
+
+        SEQUENCE requestElevator
+            CALL which_column
+            if user on gf then
+                CALL Which_elevator_gf return elevator
+            else then
+                CALL which_elevator  return elevator
+            CALL MoveElevator with elevator
+            CALL open_close_door WITH elevator
+
+        ENDSEQUENCE
+
+        CALL createColumnlist WITH amountOfColumn and amountOfElevatorPerCOlumn
+        CALL createFloorrequestbuttonList with lowestFloor and 
+    ENDDEFINE
+
+    define column USING ID and _flooramount and _minimumFloor and _maximumFloor and _amountOfELevator and amountOfElevatorPerColumn
+        ID: ID
+        status: online
+        flooramount: _flooramount
+        minimumFloor: _minimumFloor
+        maximumFloor: _maximumFloor
+        elevatorList: empty list
+
+         SEQUENCE createElevatorlist Using amountOfElevator
+            init iterator to 1
+            for amountOfElevatorPerCOlumn
+                init newElevator to instantiate elevator with 
+                add newElevator to elevatorList
+                increment iterator
+            endfor
+        ENDSEQUENCE
+
+    ENDDEFINE
+
+    define elevator using id and currentFloor
+        ID: id
+        status: idle
+        currentPosition: currentFloor
+        maximumWeight: 2100
+        Direction: none
+        RequestList: EMPTY
+        doors: closed
+
+
+    ENDDEFINE
+
+    define Floor_request_button USING  _direction AND _floor
+        status: off
+        floor: _floor
+        direction: _direction
+
+    ENDDEFINE
+
 SEQUENCE which_column USING columns and elevators and Floor_request_button
-    SET battery to 1
-    SET columns to 4
-    SET elevators to 3 by columns
-    SET Floor_request_button to 4
-    //choosing columns
-    SHOW Floor_request_button to user
-    if user clicks Floor_request_button(0, 2) THEN
-        column 1 activates Floor_request_button SEQUENCE
-    else if Floor_request_button(3,5) THEN 
-        column 2 activates Floor_request_button SEQUENCE
-    else if Floor_request_button(6, 8) THEN
-        column 3 activates Floor_request_button SEQUENCE
-    else if Floor_request_button(9, 11) THEN
-        column 4 activates Floor_request_button SEQUENCE
+   
+    'choosing columns ground floor'
+    if user is on ground floor then
+        SHOW Floor_request_button to user
+        if user clicks Floor_request_button(basement) THEN
+            show user column 1
+            call column 1 Floor_request_button SEQUENCE
+        else if Floor_request_button(floor) THEN 
+            for each 20 floors
+            show user next column
+            call next columnvFloor_request_button SEQUENCE
+            call Which_elevator_gf
+
+        endif
+    'other floors'
+    else if user floor /= ground floor then
+        SHOW Floor_request_button(ground_floor) to user
+
+        if user clicks Floor_request_button(ground_floor) then 
+        CALL which_elevator
+        read user floor , assign y then
+        read current floor, assign x
+            if x>y then go down until x=y then 
+            door_open = true for 10 sec
+
+            else if x<y then go up until x=y then
+            door_open = true for 10 sec
+
+            else if x=y then door_open = true
+            endif
+        then go to ground_floor
+
+        endif
+
     endif
+    RETURN best_elevator
 ENDSEQUENCE
-//select elevator
-SEQUENCE Wich_elevator 
-      SET queue to 0
-    if elevator is moving and Floor_request_button is pressed then
-        if moving elevator is not closest to y then 
-            do nothing
-            else if elevator is closest to y and is not going in the direction Floor_request_button is called then
-            transfer to next elevator
-            else if elevators are not going the same way then 
-            queue it for the closest elevator
-            else if elevator is closest and going in the same way then
-            stop at the Floor_request_button call in the path of the furthest Floor_request_button call on its way
+'select elevator'
+SEQUENCE Which_elevator_gf 
+    if elevator going to gf then 
+        queue the Floor_request_button call
+
+    else if elevator idle and closer then
+        queue the Floor_request_button call
+
+    else queue on the shortest queue
+
+ENDSEQUENCE
+    
+SEQUENCE which_elevator
+    if elevator is closer and going to ground_floor then
+        queue the Floor_request_button call
+
+    else if elevator is idle and closer then
+        queue the Floor_request_button call
+
+    else if elevator is idle on gf then
+        queue the Floor_request_button call
+
+    else if elevator is going up then 
+        queue the Floor_request_button call on last queue position
+
+ENDSEQUENCE
+
+    
+ENDSEQUENCE
+'' safety not moving with door open'
+SEQUENCE door_open_stop USING door_open
+    if door_open = true then
+    elevator stop until door_open = false and 
+    queue Floor_request_button requests
+ENDSEQUENCE
+
+'open/close door buttons'
+SEQUENCE open_close_door
+    if user = in elevator then 
+    show open_button and close_button 
+        if user clicks open_button then
+        door_open = true for 10 select
+        else if user clicks close_button then
+        door_open = false 
+        else do nothing
         endif
     endif
+ENDSEQUENCE
+
+'idles elevators return to gf'
+SEQUENCE idle_elevator
+    
+
+-------------------------------------------------TESTING----------------------------------------------------------

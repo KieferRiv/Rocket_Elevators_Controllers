@@ -1,106 +1,158 @@
-DEFINE Column USING id AND status:
-    ID: id,
-    Status: status,
-    ElevatorList: SET to empty List
-    SEQUENCE create ElevatorList USING elevator_amount
-    ...
-    ENDSEQUENCE
-ENDDEFINE
+ 
+ 
+ define column USING ID and _flooramount and _minimumFloor and _maximumFloor and _amountOfELevator and amountOfElevatorPerColumn
+        ID: ID
+        status: online
+        flooramount: _flooramount
+        minimumFloor: _minimumFloor
+        maximumFloor: _maximumFloor
+        elevatorList: empty list
 
-SEQUENCE OUTSIDE_BUTTON USING ElevatorList and floor_number and door_open and Floor_request_button and button_close_door
-    SET floor_number TO (1, 10)
-    SET floor_number(1) to ground_floor
-    SET door_open to false
+        SEQUENCE createElevatorlist Using amountOfElevator
+            init iterator to 1
+            for amountOfElevatorPerCOlumn
+                init newElevator to instantiate elevator with 
+                add newElevator to elevatorList
+                increment iterator
+            endfor
+        ENDSEQUENCE
+
+         SEQUENCE createFloorrequestbuttonList USING lowestFloor AND _flooramount
+            init iterator TO lowestFloor
+            FOR _flooramount
+                IF iterator is not equal to 0    
+                    IF iterator is less than 1
+                        INIT newFloorrequestbuttonList TO INSTANTIATE WITH DOWN AND iterator 
+                        ADD newFloorrequestbuttonList to FloorrequestbuttonList
+
+                    ELSE IF iterator is more than 1
+                        INIT newFloorrequestbuttonList TO INSTANTIATE WITH UP AND iterator
+                        ADD newFloorrequestbuttonList to FloorrequestbuttonList
+                    ENDIF
+                ENDIF
+                INCREMENT iterator BY 1
+            ENDFOR
+        ENDSEQUENCE
+
+        SEQUENCE requestElevator
+            call OUTSIDE_BUTTON_queue return elevator
+            call queue
+        ENDSEQUENCE
+
+ ENDDEFINE
+
+ define elevator using id and currentFloor
+        ID: id
+        status: idle
+        currentPosition: currentFloor
+        maximumWeight: 2100
+        Direction: none
+        RequestList: EMPTY
+        doors: closed
+
+
+    ENDDEFINE
+
+define Floor_request_button USING  _direction AND _floor
+        status: off
+        floor: _floor
+        direction: _direction
+
+    ENDDEFINE
+
+SEQUENCE queue
+SET queue to empty
+if OUTSIDE_BUTTON call = true then add to queue
+endif
+if OUTSIDE_BUTTON call is in queue then
+do not queue again
+endif
+
+
+SEQUENCE OUTSIDE_BUTTON_queue USING ElevatorList and floor_number and door_open and Floor_request_button and button_close_door
     
     SHOW Floor_request_button to user
-    //outside button
-    if user clicks Floor_request_button then
+    'outside button'
+    if user clicks Floor_request_button(up) then
+        READ current floor_number, ASSIGN x
+        READ user floor_number, ASSIGN y
+        if x<y and moving up and is closer then 
+            queue the Floor_request_button call 
+        else if x<y and moving up then 
+             queue the Floor_request_button call
+        else if x=y then
+            call door_open
+        else if elevator is idle and closer then 
+            queue the Floor_request_button call
+        endif
+        and call Up_Down_movement
+
+    else if user clicks Floor_request_button(down) then
          READ current floor_number, ASSIGN x
-         READ user floor_number, ASSIGN y
-         call elevator closest to y
-            if both elevators are as close to y then 
-            call last elevator
-            endif
-            if x > y  then 
-             elevator go down until x = y then
-             door_open = true for 10 seconds or until
-             button_close_door is pressed
-             else if x < y then
-             elevator go up until x = y then
-             door_open = true for 10 seconds or until
-             button_close_door is pressed
-             else if x = y then
-             door_open = true for 10 seconds or until
-             button_close_door is pressed
-            endif
+        READ user floor_number, ASSIGN y
+        if x>y and moving down and is closer then 
+            queue the Floor_request_button call
+        else if x>y and moving down then 
+             queue the Floor_request_button call
+        else if x=y then
+            call door_open
+        else if elevator us idle and closer then 
+            queue the Floor_request_button call
+        endif
+        and call Up_down_movement
     endif
 ENDSEQUENCE
+'if user presses up or down button , this is the elevator's movement'
+SEQUENCE Up_down_movement
+
+    if x>y then
+     go down 1 floor
+    else if x<y then 
+     go up 1 floor 
+     repeat until x=y
+ENDSEQUENCE 
+SEQUENCE door_open
+    door_open = true for 10 seconds then 
+    door_open = false
+
+            
+ENDSEQUENCE
+'inside buttons calls'
 SEQUENCE inside button USING inside_buttons and inside_buttons_floors and door_open and button_close_door
-    SET inside_buttons_floors(1, 10)
-    SET door_open to false
-    if user in an elevator then
-        show inside_buttons
-        if user clicks inside_buttons_floors THEN 
+    SET inside_buttons_floors
+    show inside_buttons
+        if user clicks inside_buttons_floors(1, 10) THEN 
             READ current floor, ASSIGN x
             READ floor button pressed, ASSIGN y
             if x > y THEN 
                 elevator go down until x = y then
-                door_open = true for 10 seconds or until
-                 button_close_door is pressed
+                call door_open
             else if x < y THEN 
                 elevator go up until x = y then
-                 door_open = true for 10 seconds or until
-                 button_close_door is pressed
+                call door_open
             else if x = y then 
-                 door_open = true for 10 seconds or until
-                 button_close_door is pressed
+                 call door_open
             endif
         endif
-    endif
 ENDSEQUENCE
-SEQUENCE more than 1 call USING elevator and Floor_request_button and queue
-    //more than 1 call solution
-    SET queue to 0
-    if elevator is moving and Floor_request_button is pressed then
-        if moving elevator is not closest to y then 
-            do nothing
-            else if elevator is closest to y and is not going in the direction Floor_request_button is called then
-            transfer to next elevator
-            else if both elevators are not going the same way then 
-            queue it for the closest elevator
-            else if elevator is closest and going in the same way then
-            stop at the Floor_request_button call in the path of the furthest Floor_request_button call on its way
-        endif
-    endif
-ENDSEQUENCE
-// safety not moving with door open
+'safety not moving with door open'
 SEQUENCE door_open_stop USING door_open
     if door_open = true then
-    elevator stop until door_open = false and 
-    queue Floor_request_button requests
+    elevator stop until door_open = false 
 ENDSEQUENCE
-// returning to ground floor
-SEQUENCE return to ground_floor
-    if elevator is not active for 10 minutes then
+ 'returning to ground floor'
+SEQUENCE return_to_ground_floor
+    if elevator is not active for 2 minutes then
     elevator moves to ground_floor
 ENDSEQUENCE
-// for down and up buttons 
-SEQUENCE down_up_button USING Floor_request_button
-    if Floor_request_button(up) = true then
-        if elevator lower and moving up then
-        READ user floor number, ASSIGN x
-        READ current floor_number, ASSIGN y
-        until x = y then stop and door_open = true
-        else do nothing
-        endif
-    else if Floor_request_button(down) = true then
-         if elevator higher and moving down then
-        READ user floor number, ASSIGN x
-        READ current floor_number, ASSIGN y
-        until x = y then stop and door_open = true
-        else do nothing
-        endif
+SEQUENCE idle_elevator
+
+    if elevator has not moved for 30 seconds then 
+    SET elevator to idle
+    else then
+    SET elevator to moving
 ENDSEQUENCE
+
 
 
     
@@ -111,4 +163,4 @@ ENDSEQUENCE
             
 
 
-        
+        +
