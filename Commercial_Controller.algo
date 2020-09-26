@@ -43,7 +43,7 @@
         ENDSEQUENCE
 
         CALL createColumnlist WITH amountOfColumn and amountOfElevatorPerCOlumn
-        CALL createFloorrequestbuttonList with lowestFloor and 
+        CALL createFloorrequestbuttonList with lowestFloor
     ENDDEFINE
 
     define column USING ID and _flooramount and _minimumFloor and _maximumFloor and _amountOfELevator and amountOfElevatorPerColumn
@@ -84,7 +84,7 @@
 
     ENDDEFINE
 
-SEQUENCE which_column USING columns and elevators and Floor_request_button
+SEQUENCE which_column 
    
     'choosing columns ground floor'
     if user is on ground floor then
@@ -124,14 +124,17 @@ SEQUENCE which_column USING columns and elevators and Floor_request_button
 ENDSEQUENCE
 'select elevator'
 SEQUENCE Which_elevator_gf 
-    if elevator going to gf then 
+    if elevator on gf and received request then 
+        queue the Floor_request_button call
+
+    else if elevator going to gf and closer then 
         queue the Floor_request_button call
 
     else if elevator idle and closer then
         queue the Floor_request_button call
 
     else queue on the shortest queue
-
+    return elevator
 ENDSEQUENCE
     
 SEQUENCE which_elevator
@@ -146,7 +149,7 @@ SEQUENCE which_elevator
 
     else if elevator is going up then 
         queue the Floor_request_button call on last queue position
-
+    return elevator
 ENDSEQUENCE
 
     
@@ -171,8 +174,6 @@ SEQUENCE open_close_door
     endif
 ENDSEQUENCE
 
-'idles elevators return to gf'
-SEQUENCE idle_elevator
     
 
 -------------------------------------------------TESTING----------------------------------------------------------

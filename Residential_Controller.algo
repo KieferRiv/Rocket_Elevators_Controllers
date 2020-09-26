@@ -1,6 +1,6 @@
  
  
- define column USING ID and _flooramount and _minimumFloor and _maximumFloor and _amountOfELevator and amountOfElevatorPerColumn
+define column USING ID and _flooramount and _minimumFloor and _maximumFloor and _amountOfELevator and amountOfElevatorPerCOlumn
         ID: ID
         status: online
         flooramount: _flooramount
@@ -20,15 +20,11 @@
          SEQUENCE createFloorrequestbuttonList USING lowestFloor AND _flooramount
             init iterator TO lowestFloor
             FOR _flooramount
-                IF iterator is not equal to 0    
-                    IF iterator is less than 1
-                        INIT newFloorrequestbuttonList TO INSTANTIATE WITH DOWN AND iterator 
-                        ADD newFloorrequestbuttonList to FloorrequestbuttonList
-
-                    ELSE IF iterator is more than 1
-                        INIT newFloorrequestbuttonList TO INSTANTIATE WITH UP AND iterator
-                        ADD newFloorrequestbuttonList to FloorrequestbuttonList
-                    ENDIF
+                IF iterator is not equal to 0
+                     iterator is more than 1
+                    INIT newFloorrequestbuttonList TO INSTANTIATE WITH UP AND DOWN AND iterator
+                    ADD newFloorrequestbuttonList to FloorrequestbuttonList
+                
                 ENDIF
                 INCREMENT iterator BY 1
             ENDFOR
@@ -37,11 +33,14 @@
         SEQUENCE requestElevator
             call OUTSIDE_BUTTON_queue return elevator
             call queue
+            call door_open_stop
+            call idle_elevator
+            call return_to_ground_floor
         ENDSEQUENCE
 
  ENDDEFINE
 
- define elevator using id and currentFloor
+define elevator using id and currentFloor
         ID: id
         status: idle
         currentPosition: currentFloor
@@ -50,15 +49,24 @@
         RequestList: EMPTY
         doors: closed
 
+        DEFINE inside_buttons USING  _flooramount AND _direction   
+            status:off
+            flooramount: _flooramount
+            direction: _direction
+            minimumFloor: 1 as "groundFloor"
 
-    ENDDEFINE
+        ENDDEFINE
+
+
+ENDDEFINE
 
 define Floor_request_button USING  _direction AND _floor
-        status: off
-        floor: _floor
-        direction: _direction
+    status: off
+    floor: _floor
+    direction: _direction
+   
 
-    ENDDEFINE
+ENDDEFINE
 
 SEQUENCE queue
 SET queue to empty
@@ -69,7 +77,7 @@ do not queue again
 endif
 
 
-SEQUENCE OUTSIDE_BUTTON_queue USING ElevatorList and floor_number and door_open and Floor_request_button and button_close_door
+SEQUENCE OUTSIDE_BUTTON_priority
     
     SHOW Floor_request_button to user
     'outside button'
@@ -109,7 +117,9 @@ SEQUENCE Up_down_movement
      go down 1 floor
     else if x<y then 
      go up 1 floor 
-     repeat until x=y
+     repeat until x=y then
+     call door_open
+     
 ENDSEQUENCE 
 SEQUENCE door_open
     door_open = true for 10 seconds then 
@@ -118,21 +128,14 @@ SEQUENCE door_open
             
 ENDSEQUENCE
 'inside buttons calls'
-SEQUENCE inside button USING inside_buttons and inside_buttons_floors and door_open and button_close_door
-    SET inside_buttons_floors
+SEQUENCE inside button 
+
     show inside_buttons
         if user clicks inside_buttons_floors(1, 10) THEN 
             READ current floor, ASSIGN x
             READ floor button pressed, ASSIGN y
-            if x > y THEN 
-                elevator go down until x = y then
-                call door_open
-            else if x < y THEN 
-                elevator go up until x = y then
-                call door_open
-            else if x = y then 
-                 call door_open
-            endif
+            call Up_Down_movement
+            
         endif
 ENDSEQUENCE
 'safety not moving with door open'
