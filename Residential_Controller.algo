@@ -38,7 +38,7 @@ define column USING ID and _flooramount and _minimumFloor and _maximumFloor and 
             call return_to_ground_floor
         ENDSEQUENCE
 
- ENDDEFINE
+ENDDEFINE
 
 define elevator using id and currentFloor
         ID: id
