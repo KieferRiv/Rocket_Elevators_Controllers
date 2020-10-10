@@ -4,7 +4,7 @@
         columnList: empty
         status: online
         FloorrequestbuttonList: EMPTY LIST
-
+        ////////////////DONE///////////////////////
         SEQUENCE createColumnlist Using amountOfColumn
             init iterator to 1
             for amountOfColumn
@@ -13,7 +13,7 @@
                 increment iterator
             endfor
         ENDSEQUENCE
-
+        //////////////////////Done////////////////////////////
         SEQUENCE createFloorrequestbuttonList USING lowestFloor AND _flooramount
             init iterator TO lowestFloor
             FOR _flooramount
@@ -53,7 +53,7 @@
         minimumFloor: _minimumFloor
         maximumFloor: _maximumFloor
         elevatorList: empty list
-
+        /////////////////////////////////DONE///////////////////////////////////////
          SEQUENCE createElevatorlist Using amountOfElevator
             init iterator to 1
             for amountOfElevatorPerCOlumn
@@ -76,7 +76,7 @@
 
 
     ENDDEFINE
-
+    
     define Floor_request_button USING  _direction AND _floor
         status: off
         floor: _floor
