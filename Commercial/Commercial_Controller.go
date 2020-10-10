@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	Battery1 := battery(4, -6, 66)
+	/*Battery1 := battery(4, -6, 66)
 	Battery1.ColumnList[1].ElevatorList[0].CurrentFloor = 20
 	Battery1.ColumnList[1].ElevatorList[0].Direction = "Down"
 	Battery1.ColumnList[1].ElevatorList[0].RequestedFloor = 5
@@ -20,27 +20,27 @@ func main() {
 	Battery1.ColumnList[1].ElevatorList[4].Direction = "Down"
 	Battery1.ColumnList[1].ElevatorList[4].RequestedFloor = 1
 	fmt.Println("User at floor 1 going up going to floor 20")
-	Battery1.ColumnList[1].BestElevator(1, 20)
+	Battery1.ColumnList[1].BestElevator(1, 20)*/
 
 	//scenario 2
-	//Battery1 := battery(4, -6, 66)
-	//Battery1.ColumnList[2].ElevatorList[0].CurrentFloor = 1
-	//Battery1.ColumnList[2].ElevatorList[0].Direction = "Up"
-	//Battery1.ColumnList[2].ElevatorList[0].RequestedFloor = 21
-	//Battery1.ColumnList[2].ElevatorList[1].CurrentFloor = 23
-	//Battery1.ColumnList[2].ElevatorList[1].Direction = "Up"
-	//Battery1.ColumnList[2].ElevatorList[1].RequestedFloor = 28
-	//Battery1.ColumnList[2].ElevatorList[2].CurrentFloor = 33
-	//Battery1.ColumnList[2].ElevatorList[2].Direction = "Down"
-	//Battery1.ColumnList[2].ElevatorList[2].RequestedFloor = 1
-	//Battery1.ColumnList[2].ElevatorList[3].CurrentFloor = 40
-	//Battery1.ColumnList[2].ElevatorList[3].Direction = "Down"
-	//Battery1.ColumnList[2].ElevatorList[3].RequestedFloor = 24
-	//Battery1.ColumnList[2].ElevatorList[4].CurrentFloor = 39
-	//Battery1.ColumnList[2].ElevatorList[4].Direction = "Down"
-	//Battery1.ColumnList[2].ElevatorList[4].RequestedFloor = 1
-	//fmt.Println("User at floor 1 going to floor 36")
-	//Battery1.ColumnList[2].BestElevator(1, 36)
+	/*Battery1 := battery(4, -6, 66)
+	Battery1.ColumnList[2].ElevatorList[0].CurrentFloor = 1
+	Battery1.ColumnList[2].ElevatorList[0].Direction = "Up"
+	Battery1.ColumnList[2].ElevatorList[0].RequestedFloor = 21
+	Battery1.ColumnList[2].ElevatorList[1].CurrentFloor = 23
+	Battery1.ColumnList[2].ElevatorList[1].Direction = "Up"
+	Battery1.ColumnList[2].ElevatorList[1].RequestedFloor = 28
+	Battery1.ColumnList[2].ElevatorList[2].CurrentFloor = 33
+	Battery1.ColumnList[2].ElevatorList[2].Direction = "Down"
+	Battery1.ColumnList[2].ElevatorList[2].RequestedFloor = 1
+	Battery1.ColumnList[2].ElevatorList[3].CurrentFloor = 40
+	Battery1.ColumnList[2].ElevatorList[3].Direction = "Down"
+	Battery1.ColumnList[2].ElevatorList[3].RequestedFloor = 24
+	Battery1.ColumnList[2].ElevatorList[4].CurrentFloor = 39
+	Battery1.ColumnList[2].ElevatorList[4].Direction = "Down"
+	Battery1.ColumnList[2].ElevatorList[4].RequestedFloor = 1
+	fmt.Println("User at floor 1 going to floor 36")
+	Battery1.ColumnList[2].BestElevator(1, 36)*/
 
 	//scenario 3
 	/*Battery1 := battery(4, -6, 66)
@@ -63,22 +63,22 @@ func main() {
 	Battery1.ColumnList[3].BestElevator(54, 1)*/
 
 	//scenario 4
-	//Battery1 := battery(4, -6, 66)
-	//Battery1.ColumnList[0].ElevatorList[0].CurrentFloor = -4
-	//Battery1.ColumnList[0].ElevatorList[0].Direction = "Idle"
-	//Battery1.ColumnList[0].ElevatorList[1].CurrentFloor = 1
-	//Battery1.ColumnList[0].ElevatorList[1].Direction = "Idle"
-	//Battery1.ColumnList[0].ElevatorList[2].CurrentFloor = -3
-	//Battery1.ColumnList[0].ElevatorList[2].Direction = "Down"
-	//Battery1.ColumnList[0].ElevatorList[2].RequestedFloor = -5
-	//Battery1.ColumnList[0].ElevatorList[3].CurrentFloor = -6
-	//Battery1.ColumnList[0].ElevatorList[3].Direction = "Up"
-	//Battery1.ColumnList[0].ElevatorList[3].RequestedFloor = 1
-	//Battery1.ColumnList[0].ElevatorList[4].CurrentFloor = -1
-	//Battery1.ColumnList[0].ElevatorList[4].Direction = "Down"
-	//Battery1.ColumnList[0].ElevatorList[4].RequestedFloor = -6
-	//fmt.Println("User at basement 3 going to floor 1")
-	//Battery1.ColumnList[0].BestElevator(-3, 1)
+	/*Battery1 := battery(4, -6, 66)
+	Battery1.ColumnList[0].ElevatorList[0].CurrentFloor = -4
+	Battery1.ColumnList[0].ElevatorList[0].Direction = "Idle"
+	Battery1.ColumnList[0].ElevatorList[1].CurrentFloor = 1
+	Battery1.ColumnList[0].ElevatorList[1].Direction = "Idle"
+	Battery1.ColumnList[0].ElevatorList[2].CurrentFloor = -3
+	Battery1.ColumnList[0].ElevatorList[2].Direction = "Down"
+	Battery1.ColumnList[0].ElevatorList[2].RequestedFloor = -5
+	Battery1.ColumnList[0].ElevatorList[3].CurrentFloor = -6
+	Battery1.ColumnList[0].ElevatorList[3].Direction = "Up"
+	Battery1.ColumnList[0].ElevatorList[3].RequestedFloor = 1
+	Battery1.ColumnList[0].ElevatorList[4].CurrentFloor = -1
+	Battery1.ColumnList[0].ElevatorList[4].Direction = "Down"
+	Battery1.ColumnList[0].ElevatorList[4].RequestedFloor = -6
+	fmt.Println("User at basement 3 going to floor 1")
+	Battery1.ColumnList[0].BestElevator(-3, 1)*/
 
 }
 

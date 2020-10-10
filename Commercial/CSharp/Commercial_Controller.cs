@@ -149,6 +149,8 @@ namespace odyssey
                 
             }
             // which column you are getting 
+            //not in use
+            //might use later so I let it in the code
             public Column FindBestColumn(string _Direction, int _RequestedFloor)
             {
                 for (int i = LowestFloor; i < AmountOfFloors -5; i++ )
