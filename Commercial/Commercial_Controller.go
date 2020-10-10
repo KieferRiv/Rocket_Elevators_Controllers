@@ -3,19 +3,94 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Hello world")
+	//Battery1 := battery(4, -6, 66)
+	//Battery1.ColumnList[1].ElevatorList[0].CurrentFloor = 20
+	//Battery1.ColumnList[1].ElevatorList[0].Direction = "Down"
+	//Battery1.ColumnList[1].ElevatorList[0].RequestedFloor = 5
+	//Battery1.ColumnList[1].ElevatorList[1].CurrentFloor = 3
+	//Battery1.ColumnList[1].ElevatorList[1].Direction = "Up"
+	//Battery1.ColumnList[1].ElevatorList[1].RequestedFloor = 15
+	//Battery1.ColumnList[1].ElevatorList[2].CurrentFloor = 13
+	//Battery1.ColumnList[1].ElevatorList[2].Direction = "Down"
+	//Battery1.ColumnList[1].ElevatorList[2].RequestedFloor = 1
+	//Battery1.ColumnList[1].ElevatorList[3].CurrentFloor = 15
+	//Battery1.ColumnList[1].ElevatorList[3].Direction = "Down"
+	//Battery1.ColumnList[1].ElevatorList[3].RequestedFloor = 2
+	//Battery1.ColumnList[1].ElevatorList[4].CurrentFloor = 6
+	//Battery1.ColumnList[1].ElevatorList[4].Direction = "Down"
+	//Battery1.ColumnList[1].ElevatorList[4].RequestedFloor = 1
+	//fmt.Println("User at floor 1 going up going to floor 20")
+	//Battery1.ColumnList[1].BestElevator(1)
+
+	//scenario 2
+	//Battery1 := battery(4, -6, 66)
+	//Battery1.ColumnList[2].ElevatorList[0].CurrentFloor = 1
+	//Battery1.ColumnList[2].ElevatorList[0].Direction = "Up"
+	//Battery1.ColumnList[2].ElevatorList[0].RequestedFloor = 21
+	//Battery1.ColumnList[2].ElevatorList[1].CurrentFloor = 23
+	//Battery1.ColumnList[2].ElevatorList[1].Direction = "Up"
+	//Battery1.ColumnList[2].ElevatorList[1].RequestedFloor = 28
+	//Battery1.ColumnList[2].ElevatorList[2].CurrentFloor = 33
+	//Battery1.ColumnList[2].ElevatorList[2].Direction = "Down"
+	//Battery1.ColumnList[2].ElevatorList[2].RequestedFloor = 1
+	//Battery1.ColumnList[2].ElevatorList[3].CurrentFloor = 40
+	//Battery1.ColumnList[2].ElevatorList[3].Direction = "Down"
+	//Battery1.ColumnList[2].ElevatorList[3].RequestedFloor = 24
+	//Battery1.ColumnList[2].ElevatorList[4].CurrentFloor = 39
+	//Battery1.ColumnList[2].ElevatorList[4].Direction = "Down"
+	//Battery1.ColumnList[2].ElevatorList[4].RequestedFloor = 1
+	//fmt.Println("User at floor 1 going to floor 36")
+	//Battery1.ColumnList[2].BestElevator(1)
+
+	//scenario 3
+	//Battery1 := battery(4, -6, 66)
+	//Battery1.ColumnList[3].ElevatorList[0].CurrentFloor = 58
+	//Battery1.ColumnList[3].ElevatorList[0].Direction = "Down"
+	//Battery1.ColumnList[3].ElevatorList[0].RequestedFloor = 1
+	//Battery1.ColumnList[3].ElevatorList[1].CurrentFloor = 50
+	//Battery1.ColumnList[3].ElevatorList[1].Direction = "Up"
+	//Battery1.ColumnList[3].ElevatorList[1].RequestedFloor = 60
+	//Battery1.ColumnList[3].ElevatorList[2].CurrentFloor = 46
+	//Battery1.ColumnList[3].ElevatorList[2].Direction = "Up"
+	//Battery1.ColumnList[3].ElevatorList[2].RequestedFloor = 58
+	//Battery1.ColumnList[3].ElevatorList[3].CurrentFloor = 1
+	//Battery1.ColumnList[3].ElevatorList[3].Direction = "Up"
+	//Battery1.ColumnList[3].ElevatorList[3].RequestedFloor = 54
+	//Battery1.ColumnList[3].ElevatorList[4].CurrentFloor = 60
+	//Battery1.ColumnList[3].ElevatorList[4].Direction = "Down"
+	//Battery1.ColumnList[3].ElevatorList[4].RequestedFloor = 1
+	//fmt.Println("User at floor 54 going to floor 1")
+	//Battery1.ColumnList[3].BestElevator(54)
+
+	//scenario 4
+	//Battery1 := battery(4, -6, 66)
+	//Battery1.ColumnList[0].ElevatorList[0].CurrentFloor = -4
+	//Battery1.ColumnList[0].ElevatorList[0].Direction = "Idle"
+	//Battery1.ColumnList[0].ElevatorList[1].CurrentFloor = 1
+	//Battery1.ColumnList[0].ElevatorList[1].Direction = "Idle"
+	//Battery1.ColumnList[0].ElevatorList[2].CurrentFloor = -3
+	//Battery1.ColumnList[0].ElevatorList[2].Direction = "Down"
+	//Battery1.ColumnList[0].ElevatorList[2].RequestedFloor = -5
+	//Battery1.ColumnList[0].ElevatorList[3].CurrentFloor = -6
+	//Battery1.ColumnList[0].ElevatorList[3].Direction = "Up"
+	//Battery1.ColumnList[0].ElevatorList[3].RequestedFloor = 1
+	//Battery1.ColumnList[0].ElevatorList[4].CurrentFloor = -1
+	//Battery1.ColumnList[0].ElevatorList[4].Direction = "Down"
+	//Battery1.ColumnList[0].ElevatorList[4].RequestedFloor = -6
+	//fmt.Println("User at basement 3 going to floor 1")
+	//Battery1.ColumnList[0].BestElevator(-3)
+
 }
 
 type Battery struct {
 	ColumnList       []Column
 	FloorButtonsList []FloorButtons
-	status           string
 	AmountOfColumns  int
 	LowestFloor      int
 	AmountOfFloors   int
 }
 
-func battery(Status string, AmountOfColumns, LowestFloor, AmountOfFloors int) Battery {
+func battery(AmountOfColumns, LowestFloor, AmountOfFloors int) Battery {
 	battery := new(Battery)
 	battery.AmountOfColumns = AmountOfColumns
 	battery.LowestFloor = LowestFloor
@@ -39,7 +114,6 @@ func column(ID, ElevatorsPerColumn int) Column {
 	column := new(Column)
 	column.ElevatorsPerColumn = ElevatorsPerColumn
 	column.ID = ID
-	fmt.Println(column.ElevatorList)
 
 	for i := 1; i <= ElevatorsPerColumn; i++ {
 		column.ElevatorList = append(column.ElevatorList, elevator(i))
@@ -48,51 +122,88 @@ func column(ID, ElevatorsPerColumn int) Column {
 
 }
 
+//moves the elevator
+func (el *Elevator) Move(elevator Elevator, UserFloor int) {
+	fmt.Println("in move function")
+	if UserFloor < elevator.CurrentFloor {
+		fmt.Println("in smaller userfloor")
+		i := elevator.CurrentFloor
+		for UserFloor < i {
+			i--
+			fmt.Println(i)
+		}
+		fmt.Println("opening Doors")
+		fmt.Println("closing doors")
+	} else if UserFloor > elevator.CurrentFloor {
+		i := UserFloor
+		for UserFloor > elevator.CurrentFloor {
+			i++
+		}
+		fmt.Println("opening Doors")
+		fmt.Println("closing doors")
+	} else {
+		fmt.Println("opening doors")
+		fmt.Println("closing doors")
+	}
+}
+
 //chooses the best elevator
 func (c *Column) BestElevator(UserFloor int) Elevator {
 	var bestElevator Elevator
 
 	for _, elevator := range c.ElevatorList {
-
 		if UserFloor == 1 {
 			if elevator.CurrentFloor == 1 {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			} else if elevator.RequestedFloor == 1 {
+				fmt.Println("requested floor 1")
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			} else if elevator.Direction == "Idle" && elevator.CurrentFloor != 1 {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			}
 		} else if UserFloor > 1 {
 			if elevator.Direction == "Down" && UserFloor < elevator.CurrentFloor {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			} else if elevator.Direction == "Idle" && elevator.CurrentFloor != 1 {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			} else if elevator.Direction == "Idle" && elevator.CurrentFloor == 1 {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			} else {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			}
 		} else {
 			if elevator.Direction == "Up" && UserFloor > elevator.CurrentFloor {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			} else if elevator.Direction == "Idle" && elevator.CurrentFloor != 1 {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			} else if elevator.Direction == "Idle" && elevator.CurrentFloor == 1 {
 				bestElevator = elevator
+				bestElevator.Move(elevator, UserFloor)
 				return bestElevator
 			}
 
 		}
 	}
+	return bestElevator
+
 }
 
 type Elevator struct {
